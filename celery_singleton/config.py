@@ -1,3 +1,5 @@
+import ast
+
 from importlib import import_module
 
 
@@ -24,7 +26,10 @@ class Config:
 
     @property
     def backend_kwargs(self):
-        return self.app.conf.get("singleton_backend_kwargs", {})
+        kwargs = self.app.conf.get("singleton_backend_kwargs", {})
+        if not isinstance(kwargs, dict):
+            kwargs = ast.literal_eval(kwargs)
+        return kwargs
 
     @property
     def backend_url(self):
